@@ -5,7 +5,7 @@ from modem import const
 from modem.tools import log
 
 
-class XMODEM(Modem):
+class XModem(Modem):
     '''
     XMODEM protocol implementation, expects an object to read from and an
     object to write to.
@@ -16,7 +16,7 @@ class XMODEM(Modem):
     >>> def putc(data, timeout=1):
     ...     return size or None
     ...
-    >>> modem = XMODEM(getc, putc)
+    >>> modem = XModem(getc, putc)
 
     '''
 

@@ -1,12 +1,12 @@
 import time
 
-from modem import error
 from modem import const
+from modem import error
+from modem.protocol.xmodem import XModem
 from modem.tools import log
-from modem.protocol.xmodem import XMODEM
 
 
-class XMODEMCRC(XMODEM):
+class XModemCrc(XModem):
     '''
     XMODEMCRC protocol implementation, expects an object to read from and an
     object to write to.

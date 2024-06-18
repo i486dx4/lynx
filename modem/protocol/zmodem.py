@@ -6,7 +6,7 @@ from modem import const
 from modem.tools import log
 
 
-class ZMODEM(Modem):
+class ZModem(Modem):
     '''
     ZMODEM protocol implementation, expects an object to read from and an
     object to write to.

@@ -3,10 +3,10 @@ import time
 from modem import error
 from modem import const
 from modem.tools import log
-from modem.protocol.xmodem import XMODEM
+from modem.protocol.xmodem import XModem
 
 
-class XMODEM1K(XMODEM):
+class XModem1K(XModem):
     '''
     XMODEM1K protocol implementation, expects an object to read from and an
     object to write to.

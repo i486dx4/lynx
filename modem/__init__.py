@@ -7,19 +7,19 @@ __license__ = 'MIT'
 __version__ = '0.2.4'
 
 import gettext
-from modem.protocol.xmodem import XMODEM
-from modem.protocol.xmodem1k import XMODEM1K
-from modem.protocol.xmodemcrc import XMODEMCRC
-from modem.protocol.ymodem import YMODEM
-from modem.protocol.zmodem import ZMODEM
+from modem.protocol.xmodem import XModem
+from modem.protocol.xmodem1k import XModem1K
+from modem.protocol.xmodemcrc import XModemCrc
+from modem.protocol.ymodem import YModem
+from modem.protocol.zmodem import ZModem
 
 gettext.install('modem')
 
 # To satisfy import *
 __all__ = [
-    'XMODEM',
-    'XMODEM1K',
-    'XMODEMCRC',
-    'YMODEM',
-    'ZMODEM',
+    'XModem',
+    'XModem1K',
+    'XModemCrc',
+    'YModem',
+    'ZModem',
 ]
