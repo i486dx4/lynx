@@ -28,6 +28,7 @@ class YModem(XModem):
         '''
 
         # Get a list of files to send
+        # print('pattern:', pattern)
         filenames = glob.glob(pattern)
         if not filenames:
             return True

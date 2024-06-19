@@ -22,7 +22,7 @@ def _send_char(char: bytes, timeout: int = 1, debug: bool = False):
 class Rs232Service:
     modem: YModem
 
-    def __init__(self, com_port: str, baud_rate: int = 9600):
+    def __init__(self, com_port: str, baud_rate: int = 115200):
         Rs232Global.ser = serial.Serial(com_port, baudrate=baud_rate, parity=serial.PARITY_NONE,
                                         stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)
 
@@ -33,6 +33,7 @@ class Rs232Service:
         Rs232Global.ser.close()
 
     def send_file(self, filename: str):
+        # print(f'sending {filename}')
         self.modem.send(filename)
 
     def recv_file(self, folder: str):

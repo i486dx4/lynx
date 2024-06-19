@@ -1,3 +1,4 @@
+import os
 import sys
 from getopt import getopt, GetoptError
 from pathlib import Path
@@ -67,10 +68,17 @@ if __name__ == '__main__':
         sending_directory = current_dir / 'send'
         print(f'Sending directory: {sending_directory}')
         if sending_directory.is_dir():
+            os.chdir(sending_directory)
             # sending_directory.mkdir(exist_ok=True)
-            files = [item for item in sending_directory.iterdir() if item.is_file()]
-            print(f'Found {len(files)} files')
-            print(files)
+            rs232 = Rs232Service(com_port)
+            rs232.send_file('*.*')
+            os.chdir(current_dir)
+            # print(f'Found {len(files)} files')
+            # if len(files) > 0:
+            #     rs232 = Rs232Service(com_port)
+            #     for file in files:
+            #         print(f'Sending file: {file}')
+            #         rs232.send_file(file.name)
         else:
             print(f'{sending_directory}: Sending directory does not exist')
 
