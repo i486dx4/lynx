@@ -33,7 +33,6 @@ class Rs232Service:
         Rs232Global.ser.close()
 
     def send_file(self, filename: str):
-        # print(f'sending {filename}')
         self.modem.send(filename)
 
     def recv_file(self, folder: str):

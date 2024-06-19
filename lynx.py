@@ -15,7 +15,17 @@ def list_com_ports() -> list[ListPortInfo]:
 
 
 def print_help():
-    pass
+    print(f'''
+usage: {sys.argv[0]} [options]
+
+  --send                   default is receiving
+  --com <COM port>
+  --baud <Baud>            default 115200
+  --folder <folder>        default <send> for sending, <received> for receiving
+  
+Note: use Y-Modem protocol send file via serial line, always start sending before receiving.
+    ''')
+    sys.exit()
 
 
 if __name__ == '__main__':
@@ -23,6 +33,8 @@ if __name__ == '__main__':
 
     long_opts = [
         "com=",
+        "baud=",
+        "folder=",
         "send",
         "help",
     ]
@@ -35,6 +47,8 @@ if __name__ == '__main__':
 
     send_flag = False
     com_port = None
+    baud_rate = 115200
+    folder = None
 
     for opt, arg in options:
         if opt in ("-h", "--help"):
@@ -43,6 +57,10 @@ if __name__ == '__main__':
             com_port = arg
         elif opt == "--send":
             send_flag = True
+        elif opt == "--baud":
+            baud_rate = int(arg)
+        elif opt == '--folder':
+            folder = arg
         else:
             print(f"Unknown option: {opt}")
             print_help()
@@ -51,7 +69,7 @@ if __name__ == '__main__':
 
     for port in ports:
         print(
-            f'[{port.name}][{port.hwid}][{port.description}][{port.device}][{port.vid}][{port.manufacturer}][{port.serial_number}]')
+            f'{port.name}: [{port.hwid}] {port.description}, VID: {port.vid}, {port.manufacturer}')
         if com_port is None and port.description.startswith('USB Serial Port'):
             com_port = port.device
 
@@ -59,34 +77,31 @@ if __name__ == '__main__':
         print("No USB Serial Port found")
         sys.exit(2)
 
-    print(f'Serial port: {com_port}')
+    print(f'Serial port: {com_port}, baud rate: {baud_rate}')
 
     current_dir = Path.cwd()
     print(f'Current directory: {current_dir}')
 
+    sending_directory = current_dir / 'send'
+    received_directory = current_dir / 'received'
+
+    if folder is not None:
+        sending_directory = folder
+        received_directory = folder
+
     if send_flag:
-        sending_directory = current_dir / 'send'
         print(f'Sending directory: {sending_directory}')
         if sending_directory.is_dir():
             os.chdir(sending_directory)
-            # sending_directory.mkdir(exist_ok=True)
-            rs232 = Rs232Service(com_port)
+            rs232 = Rs232Service(com_port, baud_rate=baud_rate)
             rs232.send_file('*.*')
             os.chdir(current_dir)
-            # print(f'Found {len(files)} files')
-            # if len(files) > 0:
-            #     rs232 = Rs232Service(com_port)
-            #     for file in files:
-            #         print(f'Sending file: {file}')
-            #         rs232.send_file(file.name)
         else:
             print(f'{sending_directory}: Sending directory does not exist')
-
     else:
-        received_directory = current_dir / 'receive'
-        print(f'Received directory: {received_directory}')
+        print(f'Receiving directory: {received_directory}')
         if not received_directory.is_dir():
             received_directory.mkdir()
             print(f'Created directory: {received_directory}')
-        rs232 = Rs232Service(com_port)
+        rs232 = Rs232Service(com_port, baud_rate=baud_rate)
         rs232.recv_file(received_directory.name)
